@@ -1,0 +1,42 @@
+.role.user {
+  background-color: var(--color-secondary);
+  align-self: flex-end;
+}
+
+.role.assistant {
+  color: black;
+  align-self: flex-start;
+  padding: 15px 8px !important;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.read-aloud-button {
+  margin-top: .5rem !important;
+  padding: .5rem !important;
+  left: -.5rem !important;
+}
+
+.read-aloud-loading {
+  animation: rotate 2s linear infinite;
+  margin-top: .5rem !important;
+  padding: .5rem !important;
+  left: -.5rem !important;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

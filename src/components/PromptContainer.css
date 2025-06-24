@@ -1,0 +1,49 @@
+.prompt-container {
+  display: flex;
+  position: absolute;
+  width: 65rem;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 99;
+  margin: 0 auto;
+  padding-bottom: .5rem;
+  background: white;
+}
+
+.text-input {
+  flex: 1;
+  font-size: var(--font-size-base);
+  background: var(--background-light-grey);
+  border: none;
+  padding: .5rem 1rem;
+  border-radius: 0;
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+
+.text-input::placeholder {
+  font-size: var(--font-size-base);
+}
+
+.text-input:focus {
+  outline: none;
+}
+.send-message-button {
+  border-radius: 0 !important;
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  font-size: var(--font-size-base);
+  width: fit-content;
+  background-color: var(--color-primary) !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  line-height: 28px !important;
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.send-message-button:hover {
+  background-color: var(--color-primary-hover);
+}

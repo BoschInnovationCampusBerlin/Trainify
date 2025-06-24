@@ -1,0 +1,128 @@
+.sidebar-container {
+    background: var(--background-light-grey);
+    width: 20%;
+    height: calc(100vh - var(--header-height));
+}
+
+.conversation-list-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(94.5vh - var(--header-height)) !important;
+}
+
+.conversation-list {
+    margin-top: 0 !important;
+    padding: .5rem;
+    flex: 1;
+    overflow-y: auto;
+    height: 100% !important;
+}
+
+.documentation-button {
+    width: 100% !important;
+    display: flex;
+    justify-content: flex-start !important;
+}
+
+.documentation-button:hover {
+    background: #ddd;
+}
+
+.documentation-button-text {
+    color: #333333;
+    font-weight: 700;
+    font-family: 'montserrat', sans-serif !important;
+    text-transform: capitalize !important;
+    font-weight: 700;
+}
+
+.conversation-list li {
+    list-style: none;
+    padding: .5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 250ms ease;
+}
+
+.conversation-list li:hover {
+    background: #ddd;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 1rem;
+}
+.sidebar-header-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    color: #333333;
+}
+
+.sidebar-header-text {
+    font-size: 1rem;
+}
+
+.sidebar-header-text__loading {
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    color: #333333;
+}
+
+.conversation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conversation-item.active {
+    background: #ddd;
+}
+
+.conversation-item:hover .option-button {
+    opacity: 1;
+}
+
+.option-button {
+    opacity: 0;
+}
+
+.options-menu {
+    box-shadow: none !important;
+}
+
+.options-menu ul {
+    width: 7rem;
+    padding: .5rem .5rem !important;
+}
+
+.delete-conversation-icon {
+    fill: #D32F2F !important;
+}
+
+.menu-item-action-button {
+    width: 7rem;
+}
+
+.menu-item-action-button:hover {
+    background: #ddd;
+}
+
+.menu-item-action-button__text {
+    text-transform: capitalize !important;
+    font-family: "montserrat", sans-serif;
+}
+
+.documentation-link {
+    padding: 0.5rem;
+}
+
+@media (min-width: 1920px) {
+    .conversation-list-container {
+        height: calc(93.5vh - var(--header-height)) !important;
+    }
+}
