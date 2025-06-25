@@ -19,7 +19,7 @@ export const openAiServices = {
   },
   sendRecording: async (audio) => {
     const formData = new FormData();
-    formData.append("data", audio, "recoding.webm")
+    formData.append("data", audio, "recoding.webm");
 
     return await api.post(
       "https://pavelsimo.app.n8n.cloud/webhook-test/speech-to-text",
@@ -27,6 +27,17 @@ export const openAiServices = {
       {
         headers: {
           "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  },
+  getEvaluation: async (messages) => {
+    return await api.post(
+      "https://pavelsimo.app.n8n.cloud/webhook-test/eval-transcript",
+      messages,
+      {
+        headers: {
+          "Content-Type": "text/plain",
         },
       }
     );

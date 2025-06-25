@@ -1,0 +1,54 @@
+.app-evaluation-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-height));
+  background-color: lightgrey;
+  overflow: auto;
+}
+
+.app-evaluation-content {
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+  flex: 1;
+  overflow: auto;
+}
+
+.page-title {
+  font-family: 'Bosch Sans', sans-serif;
+  font-size: 1.5rem;
+}
+
+.description-score-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.description-score-layout .evaluation-score {
+  font-size: 1.5rem;
+}
+
+.description-score-layout .evaluation-score span {
+  font-size: 2rem;
+  font-family: 'Bosch sans';
+  font-weight: 700;
+}
+
+.metrics-tables {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.table-header {
+  font-weight: 700 !important;
+  font-family: 'Bosch Sans', sans-serif !important;
+  font-size: 1rem;
+}
+
+.table-row {
+  font-family: 'Bosch Sans', sans-serif !important;
+  font-size: 1rem;
+}

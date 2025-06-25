@@ -14,6 +14,18 @@ export const useSendMessage = () => {
     })
 }
 
+export const useEvaluationMetrics = () => {
+    return useMutation({
+        mutationFn: (messages) => openAiServices.getEvaluation(messages),
+        retry: 3,
+        onSuccess: data => {
+            queryClient.invalidateQueries({
+                queryKey: [CONVERSATION_KEY.EVALUATION]
+            })
+        }
+    })
+}
+
 export const useSendRecording = () => {
     return useMutation({
         mutationFn: (audio) => openAiServices.sendRecording(audio),

@@ -12,7 +12,8 @@ export const queryClient = new QueryClient({
 export const CONVERSATION_KEY = {
   CONVERSATION: "Conversation",
   CONVERSATIONS: "Conversations",
-  CONVERSATION_TITLE: "Conversaion Title"
+  CONVERSATION_TITLE: "Conversaion Title",
+  EVALUATION: "Evaluation"
 }
 
 export const OPEN_AI_KEY = {
