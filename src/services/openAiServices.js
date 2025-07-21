@@ -1,3 +1,4 @@
+import { handleSetN8nLanguage } from "../utils/n8nLanguageConvert";
 import { api } from "./api";
 
 export const openAiServices = {
@@ -17,12 +18,14 @@ export const openAiServices = {
       )
       .then((response) => response.data);
   },
-  sendRecording: async (audio) => {
+  sendRecording: async ({ audioBlob, lang }) => {
     const formData = new FormData();
-    formData.append("data", audio, "recoding.webm");
+    formData.append("data", audioBlob, "recoding.webm");
+    const selectedLanguage = handleSetN8nLanguage(lang);
+    formData.append("lang", selectedLanguage);
 
     return await api.post(
-      "https://pavelsimo.app.n8n.cloud/webhook-test/speech-to-text",
+      "https://hoalam.app.n8n.cloud/webhook-test/speech-to-text",
       formData,
       {
         headers: {
@@ -33,7 +36,7 @@ export const openAiServices = {
   },
   getEvaluation: async (messages) => {
     return await api.post(
-      "https://pavelsimo.app.n8n.cloud/webhook-test/eval-transcript",
+      "https://hoalam.app.n8n.cloud/webhook-test/eval-transcript",
       messages,
       {
         headers: {

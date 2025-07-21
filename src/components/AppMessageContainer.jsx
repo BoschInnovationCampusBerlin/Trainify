@@ -6,14 +6,14 @@ import { IconButton } from "@mui/material";
 import { ReactComponent as RecordIcon } from "../../src/assets/icons/microphone-classic.svg";
 import { ReactComponent as StopRecordIcon } from "../../src/assets/icons/stop-frame-white.svg";
 import { useMessages } from "../hooks/useMessages";
-import PromptContainer from "./PromptContainer";
-import './AppMessageContainer.css'
-import AgentPromptContainer from "./AgentPromptContainer";
+import "./AppMessageContainer.css";
 
-const AppMessageContainer = () => {
+const AppMessageContainer = (props) => {
+  const { selectedLanguage } = props;
   const [messages, setMessages] = useState([]);
-  
-  const { addConversationMessage, messages: conversaionMessages } = useMessages();
+
+  const { addConversationMessage, messages: conversaionMessages } =
+    useMessages();
   const [transcript, setTranscript] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [nextPromptText, setNextPromptText] = useState("");
@@ -67,30 +67,33 @@ const AppMessageContainer = () => {
     setIsListening(true);
     setTranscript("");
 
-    recognitionRef.current?.start();
+    if (recognitionRef.current) {
+      recognitionRef.current.lang = selectedLanguage;
+      recognitionRef.current.start();
 
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new window.MediaRecorder(stream, {
-      mimeType: "audio/webm",
-    });
-    audioChunksRef.current = [];
-
-    recorder.ondataavailable = (e) => {
-      if (e.data.size > 0) audioChunksRef.current.push(e.data);
-    };
-
-    recorder.onstop = () => {
-      const audioBlob = new Blob(audioChunksRef.current, {
-        type: "audio/webm",
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new window.MediaRecorder(stream, {
+        mimeType: "audio/webm",
       });
-      const currentTranscript = transcriptRef.current;
-      sendMessage(audioBlob, currentTranscript);
-      stream.getTracks().forEach((track) => track.stop());
-    };
+      audioChunksRef.current = [];
 
-    mediaRecorderRef.current = recorder;
-    recorder.start();
-  }, [isListening]);
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/webm",
+        });
+        const currentTranscript = transcriptRef.current;
+        sendMessage(audioBlob, currentTranscript, selectedLanguage);
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      mediaRecorderRef.current = recorder;
+      recorder.start();
+    }
+  }, [isListening, selectedLanguage]);
 
   const stopListening = useCallback(() => {
     setIsListening(false);
@@ -98,7 +101,7 @@ const AppMessageContainer = () => {
     mediaRecorderRef.current?.stop();
   }, []);
 
-  const sendMessage = async (audioBlob, transcriptText) => {
+  const sendMessage = async (audioBlob, transcriptText, lang) => {
     if (!transcriptText.trim()) return;
 
     try {
@@ -107,9 +110,17 @@ const AppMessageContainer = () => {
         { role: "agent", content: formatTranscript(transcriptText) },
       ]);
 
-      addConversationMessage({ role: "agent", content: formatTranscript(transcriptText) })
+      addConversationMessage({
+        role: "agent",
+        content: formatTranscript(transcriptText),
+      });
 
-      const response = await sendRecordingAsync(audioBlob);
+      const reqBody = {
+        audioBlob,
+        lang,
+      };
+
+      const response = await sendRecordingAsync(reqBody);
 
       if (response.data) {
         const data = response.data;
@@ -130,7 +141,7 @@ const AppMessageContainer = () => {
           ...prev,
           { role: "victim", content: assistantMessage },
         ]);
-        addConversationMessage({ role: "victim", content: assistantMessage })
+        addConversationMessage({ role: "victim", content: assistantMessage });
 
         setNextPromptText(data.promptText);
       }
@@ -160,7 +171,7 @@ const AppMessageContainer = () => {
           isLoading={isSendRecordingPending}
         />
       </div>
-      
+
       <div className="audio-record-container">
         {/* <AgentPromptContainer userInput={nextPromptText} sendMessage={sendMessage}  /> */}
         <IconButton

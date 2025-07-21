@@ -28,7 +28,7 @@ export const useEvaluationMetrics = () => {
 
 export const useSendRecording = () => {
     return useMutation({
-        mutationFn: (audio) => openAiServices.sendRecording(audio),
+        mutationFn: openAiServices.sendRecording,
         retry: 3,
         onSuccess: data => {
             queryClient.invalidateQueries({

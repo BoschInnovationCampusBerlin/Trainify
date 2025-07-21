@@ -1,4 +1,5 @@
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { CONVERSATION_KEY } from "../utils/reactQueryUtil";
 
 const MESSAGES_QUERY_KEY = ["messages"];
 
@@ -7,9 +8,9 @@ export const useMessages = () => {
 
   const getMessages = useQuery({
     queryKey: MESSAGES_QUERY_KEY,
-    queryFn: () => [], // initially empty, or load from localStorage/API
+    queryFn: () => [],
     staleTime: Infinity,
-    enabled: false, // don't run automatically
+    enabled: false,
   });
 
   const setMessages = useMutation({
@@ -25,9 +26,15 @@ export const useMessages = () => {
     queryClient.setQueryData(MESSAGES_QUERY_KEY, updated);
   };
 
+  const clearConversationMessages = () => {
+    queryClient.setQueryData(MESSAGES_QUERY_KEY, []);
+    queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY_KEY});
+  };
+
   return {
     messages: queryClient.getQueryData(MESSAGES_QUERY_KEY) || [],
     setMessages: setMessages.mutate,
     addConversationMessage,
+    clearConversationMessages
   };
 };

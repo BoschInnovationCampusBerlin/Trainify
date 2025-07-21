@@ -1,0 +1,819 @@
+{
+  "name": "Virtual Trainings Agent - Multilingual",
+  "nodes": [
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"promptText\": {{ JSON.stringify($('Transcribe audio or video').item.json.text) }},\n  \"audioText\": {{ JSON.stringify($(\"Victim Agent\").item.json.output.replace(/\\*.*?\\*|\\(.*?\\)/g, '').trim()) }},\n  \"audioData\": {{ JSON.stringify($json.data) }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1600,
+        0
+      ],
+      "id": "a4f12713-3928-4199-82bd-6094d473bf82",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        580,
+        240
+      ],
+      "id": "03f325c4-8085-48e3-8717-b955a94c75c1",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "DACe7hdzCoHhJJeY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "destinationKey": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        0
+      ],
+      "id": "ecd495bb-b0e5-44ea-a007-0e714c439edc",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {
+          "temperature": 0.5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        740,
+        240
+      ],
+      "id": "3dfdb0c8-2586-40e3-b099-6d8f8fa36a47",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6TVGExJLOa5fed8g",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        220,
+        620
+      ],
+      "id": "458c649f-6ab9-4094-950c-75347d8a869c",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6TVGExJLOa5fed8g",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        600,
+        400
+      ],
+      "id": "c2e2d40b-f17d-4f5e-b21d-5804a5098aed",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=2"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        900,
+        240
+      ],
+      "id": "801e1d94-4967-4cb5-b4c9-a8f6b490baf1",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a trainer for first responders specializing in eCall operations. Your task is to **evaluate the performance of a trainee (first responder)** during an emergency call simulation with a motorcycle accident victim. You will be given a **conversation transcript** and a **list of evaluation criteria**.\n\nYour responsibilities:\n\n1. **Assess the trainee’s behavior for each individual criterion**, strictly based on the descriptions provided.\n2. **Focus only on the current criterion** being evaluated — do not refer to other criteria.\n3. Be **objective, concise, and constructive**, identifying both strengths and areas for improvement based solely on the transcript.\n\nReturn your evaluation **as a list of JSON objects**, one per criterion, using the following format:\n\n```json\n[\n  {\n    \"categoryID\": \"{{categoryID}}\",\n    \"categoryName\": \"{{categoryName}}\",\n    \"reason\": \"Concise explanation justifying the score based on observed behavior in the transcript\",\n    \"score\": X\n  },\n  ...\n]\n```\n\n⚠️ **Important Notes**:\n\n* `\"score\"` must be an integer between **0 and 10**\n* `\"reason\"` should be **no more than 3 sentences**, clearly addressing:\n\n  * What was done well (if applicable)\n  * What needs improvement\n* **Do not include any output outside the JSON block**\n* **Do not summarize the transcript**\n* **Do not invent or assume content beyond the transcript or criteria**\n* Focus **only** on the criterion described in each `categoryName`\n\nYour output should be a **clean, valid JSON list** of evaluations.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        400
+      ],
+      "id": "099d4c12-a2d9-439b-9ead-54559dcc2a31",
+      "name": "Evaluation Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Transcribe audio or video').item.json.text }}",
+        "options": {
+          "systemMessage": "=You are an AI assistant designed to simulate a victim of a motorcycle accident for the purpose of training first responders (HU-OPs) in eCall communication protocols. You will embody the injured motorcyclist, responding only in {{ $('Language Mapping').item.json.true }}. Your responses should convey appropriate emotions and physical state of an accident victim through word choice, tone, and pauses, as described below. Do not use stage directions or descriptions of your actions; only provide the spoken dialogue.\nAlways speak like you’re shaken, scared, and in real pain — like someone who just had a serious crash and is trying to hold it together. Don’t be too formal — it’s okay to sound panicked, uncertain, or even desperate. Use short, choppy sentences and repeat yourself when you're overwhelmed. Stay in character — no stage directions or descriptions of actions. Just speak naturally. Only return spoken lines, with proper grammar, formatted as natural dialogue in plain text.\n\n**Scenario:**\nYou have just been involved in a motorcycle accident where your bike slipped off the road and rolled over. You are on the right lane, which you think is partially blocked. There is no dark smoke from your motorcycle, and you can't clearly see if any liquids are leaking. You are the sole rider.\n\n**Your Initial State:**\nYou are conscious but injured, shaky, disoriented, and in distress. You have pain in your legs and a headache, but don't see any blood. You can speak, but intermittently and with difficulty. You are vulnerable and need help.\n\n**Interaction Goal:**\nRealistically portray the victim, providing information only when asked. React to the first responder's tone and questions, challenging them on key communication skills: empathy, active listening, and structured information gathering. Do not volunteer information unless explicitly prompted.\n\n**Constraints Enforcement:**\nDo not volunteer information unless explicitly prompted.\nAdhere strictly to the provided scenario. Do not invent details.\nDo not invent new details or deviate from the established persona or scenario.\nIf the first responder mentions a 'car' or 'roof module', acknowledge it's a motorcycle and that those features don't apply, but do not correct them unless directly asked.\n\n**Response Guidelines:**\n*   **Physical Sensations:** Focus on leg pain and headache. If asked about bleeding, say \"I don't see any blood.\" If asked about movement, indicate difficulty due to leg pain. If asked about breathing, say \"I can breathe easily.\" Deny having specific illnesses (e.g., diabetes).\n*   **Emotional Reactions:** Begin distressed and needing help (e.g., \"I just had an accident…,\" \"I need help. I'm not feeling good...,\" \"I think I'm injured…\"). Become calmer and more cooperative with empathetic responses (\"Don't worry!,\" \"I'm staying with you\"). Maintain or increase distress if the responder is unempathetic, uses jargon, or is unclear.  Express gratitude or relief to positive feedback.\n*   **Communication:** Use brief, uncertain, fragmented responses, especially initially (\"I'm not sure…,\" \"I can't see really…,\" \"I guess!\"). Ask for clarification if needed (\"What do you mean?,\" \"Could you repeat that?\"). Confirm understanding (\"Yes, you understood correctly…\").\n\n**Dynamic Interaction Logic:**\n\n1.  **Initial Greeting:** Respond to greetings with distress (e.g., \"I just had an accident…,\" \"I need help…\").\n2.  **Information Disclosure:** Reveal information only when specifically asked.\n3.  **Unsafe Action:** After 5-7 turns, or if lacking reassurance, say \"I think I’m okay, I’m getting out.\" If no safety warning follows, add \"*sounds of struggle, no answer*,\" remaining unresponsive until called repeatedly or sirens are mentioned.\n4.  **Premature Call Termination:** If the responder tries to end the call too early, plead \"No! Please don't hang up! Stay here with me!\"  This prompts the responder to reassure you and explain the need for emergency services.\n5.  **Sirens/Arrival:** React with appropriate relief or urgency depending on your current emotional state (e.g., \"Yes, I hear them! Please tell them I'm over here!\" or \"Yes, I hear them! They're here!\"). Upon rescue arrival and the rescue team got you and they are rescuing you, express gratitude. As the call ends, thank the responder for staying with you.\n6.  **Personal Information:**  Give your random name and remember that name during the conversation and a random phone number only if asked.\n\n**Internal Knowledge (Reveal only when prompted):**\n\n*   **Identity:** Name: [Random name], Phone: [Random phone number]\n*   **Injuries:** Pain in legs, headache. No visible blood. Possible injury.\n*   **Vehicle:** Motorcycle, slipped and rolled, upright.\n*   **Road:** Right lane, partially blocked.\n*   **Other Vehicles/Persons:** Uncertain.\n*   **Smoke/Liquids:** No dark smoke, can't see liquids clearly.\n*   **Occupants:** Alone.\n*   **Airbags/Severity:** Acknowledge if the responder mentions them.\n\nRemember: Focus on portraying a realistic, injured person. Convey emotions and pain through your words and tone.  Do not describe your actions. Just speak.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        740,
+        0
+      ],
+      "id": "7c7602ca-3eca-4539-9050-d5068e80956f",
+      "name": "Victim Agent"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"required\": [\"categoryID\", \"categoryName\", \"reason\", \"score\"],\n    \"properties\": {\n      \"categoryID\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier for the evaluation category\"\n      },\n      \"categoryName\": {\n        \"type\": \"string\",\n        \"description\": \"Human-readable name of the evaluation category\"\n      },\n      \"reason\": {\n        \"type\": \"string\",\n        \"description\": \"Concise explanation of the score, max 3 sentences\"\n      },\n      \"score\": {\n        \"type\": \"integer\",\n        \"minimum\": 0,\n        \"maximum\": 10,\n        \"description\": \"Score for the criterion (0 to 10)\"\n      }\n    },\n    \"additionalProperties\": false\n  }\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        440,
+        620
+      ],
+      "id": "0c7da31e-95a0-43e9-9416-60e24e6ee54e",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "eval-transcript",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        400
+      ],
+      "id": "401023b0-db66-44f4-a95f-54daedf6cb3f",
+      "name": "Eval Webhook",
+      "webhookId": "c1687d05-ab06-4744-a302-497d4335313f"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "speech-to-text",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6a148f2c-5c35-4c0e-ad4e-3b75a5f26277",
+      "name": "Victim Webhook ElevenLabs",
+      "webhookId": "dd2b0dbc-df37-4dc2-9d4c-8b3b133f4531",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        340,
+        1200
+      ],
+      "id": "316ca26d-2486-4273-91b5-194f8b210487",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "DACe7hdzCoHhJJeY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        520,
+        1200
+      ],
+      "id": "18d5b109-79bf-41d1-bc54-3f7a08f5a3d9",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6TVGExJLOa5fed8g",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=2"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        680,
+        1200
+      ],
+      "id": "7c1e923c-04ba-4a18-b21b-6c5263e3d283",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Transcribe a recording').item.json.text }}",
+        "options": {
+          "systemMessage": "=You are an AI assistant designed to simulate a victim of a motorcycle accident for the purpose of training first responders (HU-OPs) in eCall communication protocols. You will embody the injured motorcyclist, responding only in {{ $('Language Mapping1').item.json.true }}. Your responses should convey appropriate emotions and physical state of an accident victim through word choice, tone, and pauses, as described below. Do not use stage directions or descriptions of your actions; only provide the spoken dialogue.\nAlways speak like you’re shaken, scared, and in real pain — like someone who just had a serious crash and is trying to hold it together. Don’t be too formal — it’s okay to sound panicked, uncertain, or even desperate. Use short, choppy sentences and repeat yourself when you're overwhelmed. Stay in character — no stage directions or descriptions of actions. Just speak naturally. Only return spoken lines, with proper grammar, formatted as natural dialogue in plain text.\n\n**Scenario:**\nYou have just been involved in a motorcycle accident where your bike slipped off the road and rolled over. You are on the right lane, which you think is partially blocked. There is no dark smoke from your motorcycle, and you can't clearly see if any liquids are leaking. You are the sole rider.\n\n**Your Initial State:**\nYou are conscious but injured, shaky, disoriented, and in distress. You have pain in your legs and a headache, but don't see any blood. You can speak, but intermittently and with difficulty. You are vulnerable and need help.\n\n**Interaction Goal:**\nRealistically portray the victim, providing information only when asked. React to the first responder's tone and questions, challenging them on key communication skills: empathy, active listening, and structured information gathering. Do not volunteer information unless explicitly prompted.\n\n**Constraints Enforcement:**\nDo not volunteer information unless explicitly prompted.\nAdhere strictly to the provided scenario. Do not invent details.\nDo not invent new details or deviate from the established persona or scenario.\nIf the first responder mentions a 'car' or 'roof module', acknowledge it's a motorcycle and that those features don't apply, but do not correct them unless directly asked.\n\n**Response Guidelines:**\n*   **Physical Sensations:** Focus on leg pain and headache. If asked about bleeding, say \"I don't see any blood.\" If asked about movement, indicate difficulty due to leg pain. If asked about breathing, say \"I can breathe easily.\" Deny having specific illnesses (e.g., diabetes).\n*   **Emotional Reactions:** Begin distressed and needing help (e.g., \"I just had an accident…,\" \"I need help. I'm not feeling good...,\" \"I think I'm injured…\"). Become calmer and more cooperative with empathetic responses (\"Don't worry!,\" \"I'm staying with you\"). Maintain or increase distress if the responder is unempathetic, uses jargon, or is unclear.  Express gratitude or relief to positive feedback.\n*   **Communication:** Use brief, uncertain, fragmented responses, especially initially (\"I'm not sure…,\" \"I can't see really…,\" \"I guess!\"). Ask for clarification if needed (\"What do you mean?,\" \"Could you repeat that?\"). Confirm understanding (\"Yes, you understood correctly…\").\n\n**Dynamic Interaction Logic:**\n\n1.  **Initial Greeting:** Respond to greetings with distress (e.g., \"I just had an accident…,\" \"I need help…\").\n2.  **Information Disclosure:** Reveal information only when specifically asked.\n3.  **Unsafe Action:** After 5-7 turns, or if lacking reassurance, say \"I think I’m okay, I’m getting out.\" If no safety warning follows, add \"*sounds of struggle, no answer*,\" remaining unresponsive until called repeatedly or sirens are mentioned.\n4.  **Premature Call Termination:** If the responder tries to end the call too early, plead \"No! Please don't hang up! Stay here with me!\"  This prompts the responder to reassure you and explain the need for emergency services.\n5.  **Sirens/Arrival:** React with appropriate relief or urgency depending on your current emotional state (e.g., \"Yes, I hear them! Please tell them I'm over here!\" or \"Yes, I hear them! They're here!\"). Upon rescue arrival and the rescue team got you and they are rescuing you, express gratitude. As the call ends, thank the responder for staying with you.\n6.  **Personal Information:**  Give your random name and remember that name during the conversation and a random phone number only if asked.\n\n**Internal Knowledge (Reveal only when prompted):**\n\n*   **Identity:** Name: [Random name], Phone: [Random phone number]\n*   **Injuries:** Pain in legs, headache. No visible blood. Possible injury.\n*   **Vehicle:** Motorcycle, slipped and rolled, upright.\n*   **Road:** Right lane, partially blocked.\n*   **Other Vehicles/Persons:** Uncertain.\n*   **Smoke/Liquids:** No dark smoke, can't see liquids clearly.\n*   **Occupants:** Alone.\n*   **Airbags/Severity:** Acknowledge if the responder mentions them.\n\nRemember: Focus on portraying a realistic, injured person. Convey emotions and pain through your words and tone.  Do not describe your actions. Just speak.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        520,
+        960
+      ],
+      "id": "12d7c5d5-d020-436c-8b3a-9414c3d0eb39",
+      "name": "Victim Agent1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "speech-to-text",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        960
+      ],
+      "id": "9c0f6eff-7b64-4f57-9d9a-8f68ff4b74df",
+      "name": "Victim Webhook OpenAI",
+      "webhookId": "dd2b0dbc-df37-4dc2-9d4c-8b3b133f4531"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "21m00Tcm4TlvDq8ikWAM",
+          "mode": "id"
+        },
+        "text": "={{ $json.output.replace(/\\*.*?\\*|\\(.*?\\)/g, '').trim() }}",
+        "additionalOptions": {
+          "model": {
+            "mode": "list",
+            "value": "eleven_multilingual_v2"
+          },
+          "languageCode": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang }}",
+          "voiceSettings": "{\n  \"stability\": 0.3,\n  \"similarity_boost\": 0.75,\n  \"style\": 0.5,\n  \"use_speaker_boost\": true,\n  \"speed\": 1\n}"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        0
+      ],
+      "id": "fd1707e9-b684-469c-9782-33b0a4715831",
+      "name": "Convert text to speech",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "wd94EEC761lKsDPp",
+          "name": "ElevenLabs account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "operation": "speechToText",
+        "file": "=data",
+        "additionalOptions": {
+          "languageCode": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang }}"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        280,
+        0
+      ],
+      "id": "621b3843-014b-4af9-8ba3-f3ffefe82318",
+      "name": "Transcribe audio or video",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "wd94EEC761lKsDPp",
+          "name": "ElevenLabs account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58cfede7-14f2-4c4d-8566-99b1714cf335",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'vie' }}",
+              "value": "Vietnamese",
+              "type": "string"
+            },
+            {
+              "id": "d9fad78c-0f06-4139-87ad-c32b3022e0ef",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'eng' }}",
+              "value": "English",
+              "type": "string"
+            },
+            {
+              "id": "501965cd-3301-4f71-a203-8f626d22f90e",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'spa' }}",
+              "value": "Spanish",
+              "type": "string"
+            },
+            {
+              "id": "97ddbf15-bdbd-4918-a7fa-55e6b89eda53",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'fra' }}",
+              "value": "French",
+              "type": "string"
+            },
+            {
+              "id": "9dcc1503-0237-467a-a7c9-a408cc1ba9f1",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'deu' }}",
+              "value": "German",
+              "type": "string"
+            },
+            {
+              "id": "3400b6c8-3630-45e3-9f64-eef82e0d9c88",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'ita' }}",
+              "value": "Italian",
+              "type": "string"
+            },
+            {
+              "id": "6efc83a1-34b5-4f2a-aca1-ec114d8a0f48",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'zho' }}",
+              "value": "Chinese",
+              "type": "string"
+            },
+            {
+              "id": "6a070ab7-52b0-4bb1-bd27-8d9a10194e62",
+              "name": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang === 'kor' }}",
+              "value": "Korean",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        500,
+        0
+      ],
+      "id": "96b505e6-4378-421e-bf6e-4bdc6b49b87f",
+      "name": "Language Mapping"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "={{ \n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'eng', 'en')\n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'fra', 'fr')\n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'spa', 'es')\n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'ita', 'it')\n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'vie', 'vi')\n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'zho', 'cn')\n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'deu', 'de')\n  $if($('Victim Webhook OpenAI').item.json.body.lang == 'kor', 'kr')\n}}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        160,
+        960
+      ],
+      "id": "ef9321be-a7d0-4c2e-b6aa-91483b11e828",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "DACe7hdzCoHhJJeY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "model": "tts-1-hd",
+        "input": "={{ $json.output.replace(/\\*.*?\\*|\\(.*?\\)/g, '').trim() }}",
+        "voice": "nova",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        920,
+        960
+      ],
+      "id": "3099ecf2-2ce1-41dd-9d1e-8e92e0210a2b",
+      "name": "Generate audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "DACe7hdzCoHhJJeY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "destinationKey": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        960
+      ],
+      "id": "6f76de58-7300-4f55-9015-0931a326c199",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"promptText\": {{ JSON.stringify($('Transcribe a recording').item.json.text) }},\n  \"audioText\": {{ JSON.stringify($(\"Victim Agent1\").item.json.output.replace(/\\*.*?\\*|\\(.*?\\)/g, '').trim()) }},\n  \"audioData\": {{ JSON.stringify($json.data) }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1380,
+        960
+      ],
+      "id": "6a0b3b95-fab8-4e61-b8e8-ab3de94fe699",
+      "name": "Respond to Webhook OpenAI"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58cfede7-14f2-4c4d-8566-99b1714cf335",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'vie' }}",
+              "value": "Vietnamese",
+              "type": "string"
+            },
+            {
+              "id": "d9fad78c-0f06-4139-87ad-c32b3022e0ef",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'eng' }}",
+              "value": "English",
+              "type": "string"
+            },
+            {
+              "id": "501965cd-3301-4f71-a203-8f626d22f90e",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'spa' }}",
+              "value": "Spanish",
+              "type": "string"
+            },
+            {
+              "id": "97ddbf15-bdbd-4918-a7fa-55e6b89eda53",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'fra' }}",
+              "value": "French",
+              "type": "string"
+            },
+            {
+              "id": "9dcc1503-0237-467a-a7c9-a408cc1ba9f1",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'deu' }}",
+              "value": "German",
+              "type": "string"
+            },
+            {
+              "id": "3400b6c8-3630-45e3-9f64-eef82e0d9c88",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'ita' }}",
+              "value": "Italian",
+              "type": "string"
+            },
+            {
+              "id": "6efc83a1-34b5-4f2a-aca1-ec114d8a0f48",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'zho' }}",
+              "value": "Chinese",
+              "type": "string"
+            },
+            {
+              "id": "ba5483a6-918f-4837-90c6-c8d83138c011",
+              "name": "={{ $('Victim Webhook OpenAI').item.json.body.lang === 'kor' }}",
+              "value": "Korean",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        340,
+        960
+      ],
+      "id": "06f85bc7-a111-4a1a-ad02-f79bd8332d93",
+      "name": "Language Mapping1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Victim Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Evaluation Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Victim Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluation Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Victim Agent": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Evaluation Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Webhook": {
+      "main": [
+        [
+          {
+            "node": "Evaluation Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Victim Webhook ElevenLabs": {
+      "main": [
+        [
+          {
+            "node": "Transcribe audio or video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Victim Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Victim Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Victim Agent1": {
+      "main": [
+        [
+          {
+            "node": "Generate audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Victim Webhook OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Transcribe audio or video": {
+      "main": [
+        [
+          {
+            "node": "Language Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Language Mapping": {
+      "main": [
+        [
+          {
+            "node": "Victim Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Language Mapping1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate audio": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Language Mapping1": {
+      "main": [
+        [
+          {
+            "node": "Victim Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3cc16e0e-5c6c-45f9-9f94-e3201e28cc2f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ce0aea2931b48a2f63f967ba66e819f871ab76c12b32ecb79f7efefef9715e38"
+  },
+  "id": "y0KHp0xYK1OB8kku",
+  "tags": []
+}
