@@ -1,5 +1,5 @@
 {
-  "name": "Virtual Trainings Agent - Multilingual",
+  "name": "My workflow",
   "nodes": [
     {
       "parameters": {
@@ -13,7 +13,7 @@
         1600,
         0
       ],
-      "id": "a4f12713-3928-4199-82bd-6094d473bf82",
+      "id": "38fe48ea-6aab-4fda-9425-35fc0bb20c90",
       "name": "Respond to Webhook"
     },
     {
@@ -34,11 +34,11 @@
         580,
         240
       ],
-      "id": "03f325c4-8085-48e3-8717-b955a94c75c1",
+      "id": "b5af3dce-1c55-4c1a-8906-2454760f582e",
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "DACe7hdzCoHhJJeY",
+          "id": "c4FRyQYo26Zj5Vaa",
           "name": "OpenAi account"
         }
       }
@@ -55,12 +55,11 @@
         1360,
         0
       ],
-      "id": "ecd495bb-b0e5-44ea-a007-0e714c439edc",
+      "id": "fb1f390c-e0b6-4782-bdf5-7c52becdcc4d",
       "name": "Extract from File"
     },
     {
       "parameters": {
-        "modelName": "models/gemini-2.5-flash",
         "options": {
           "temperature": 0.5
         }
@@ -71,18 +70,17 @@
         740,
         240
       ],
-      "id": "3dfdb0c8-2586-40e3-b099-6d8f8fa36a47",
+      "id": "8eae3e25-c4e4-4471-99f5-2c63c8eaabd9",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "6TVGExJLOa5fed8g",
-          "name": "Google Gemini(PaLM) Api account 2"
+          "id": "eRIA2mULZiDS8qvK",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
     {
       "parameters": {
-        "modelName": "models/gemini-2.5-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -91,12 +89,12 @@
         220,
         620
       ],
-      "id": "458c649f-6ab9-4094-950c-75347d8a869c",
+      "id": "787a9850-5645-4efe-a60f-9ab5935e1b77",
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "6TVGExJLOa5fed8g",
-          "name": "Google Gemini(PaLM) Api account 2"
+          "id": "eRIA2mULZiDS8qvK",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
@@ -110,7 +108,7 @@
         600,
         400
       ],
-      "id": "c2e2d40b-f17d-4f5e-b21d-5804a5098aed",
+      "id": "f05d1176-9643-443d-8baf-17e4fcdf6bc4",
       "name": "Respond to Webhook1"
     },
     {
@@ -124,7 +122,7 @@
         900,
         240
       ],
-      "id": "801e1d94-4967-4cb5-b4c9-a8f6b490baf1",
+      "id": "e5e17612-e6c1-473f-b1db-d2dbd216980b",
       "name": "Simple Memory"
     },
     {
@@ -142,7 +140,7 @@
         220,
         400
       ],
-      "id": "099d4c12-a2d9-439b-9ead-54559dcc2a31",
+      "id": "15c45027-3892-49ed-b7dc-d66d04264af7",
       "name": "Evaluation Agent"
     },
     {
@@ -159,7 +157,7 @@
         740,
         0
       ],
-      "id": "7c7602ca-3eca-4539-9050-d5068e80956f",
+      "id": "132d322a-df5e-4cb0-841d-a4ab5958c6a3",
       "name": "Victim Agent"
     },
     {
@@ -173,7 +171,7 @@
         440,
         620
       ],
-      "id": "0c7da31e-95a0-43e9-9416-60e24e6ee54e",
+      "id": "60202eab-3d19-4a3b-874b-9d821e6b8ddf",
       "name": "Structured Output Parser"
     },
     {
@@ -189,7 +187,7 @@
         0,
         400
       ],
-      "id": "401023b0-db66-44f4-a95f-54daedf6cb3f",
+      "id": "d4228abc-ea69-4b38-8d7f-1442ebf83498",
       "name": "Eval Webhook",
       "webhookId": "c1687d05-ab06-4744-a302-497d4335313f"
     },
@@ -206,10 +204,9 @@
         0,
         0
       ],
-      "id": "6a148f2c-5c35-4c0e-ad4e-3b75a5f26277",
+      "id": "f08e276e-20dd-4b33-9e24-85425ed7a531",
       "name": "Victim Webhook ElevenLabs",
-      "webhookId": "dd2b0dbc-df37-4dc2-9d4c-8b3b133f4531",
-      "disabled": true
+      "webhookId": "dd2b0dbc-df37-4dc2-9d4c-8b3b133f4531"
     },
     {
       "parameters": {
@@ -227,18 +224,17 @@
         340,
         1200
       ],
-      "id": "316ca26d-2486-4273-91b5-194f8b210487",
+      "id": "6460ad20-32ca-44b5-85b0-a3105fe99a7e",
       "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
-          "id": "DACe7hdzCoHhJJeY",
+          "id": "c4FRyQYo26Zj5Vaa",
           "name": "OpenAi account"
         }
       }
     },
     {
       "parameters": {
-        "modelName": "models/gemini-2.5-flash",
         "options": {
           "temperature": 0.3
         }
@@ -249,12 +245,12 @@
         520,
         1200
       ],
-      "id": "18d5b109-79bf-41d1-bc54-3f7a08f5a3d9",
+      "id": "f17e085a-1887-4428-95fa-868d70815533",
       "name": "Google Gemini Chat Model2",
       "credentials": {
         "googlePalmApi": {
-          "id": "6TVGExJLOa5fed8g",
-          "name": "Google Gemini(PaLM) Api account 2"
+          "id": "eRIA2mULZiDS8qvK",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
@@ -269,7 +265,7 @@
         680,
         1200
       ],
-      "id": "7c1e923c-04ba-4a18-b21b-6c5263e3d283",
+      "id": "cb5a48e3-f666-4227-9753-909864610aff",
       "name": "Simple Memory1"
     },
     {
@@ -286,7 +282,7 @@
         520,
         960
       ],
-      "id": "12d7c5d5-d020-436c-8b3a-9414c3d0eb39",
+      "id": "18fe5d67-2bfa-4aeb-8580-5a6a45f4f99c",
       "name": "Victim Agent1"
     },
     {
@@ -302,16 +298,17 @@
         -60,
         960
       ],
-      "id": "9c0f6eff-7b64-4f57-9d9a-8f68ff4b74df",
+      "id": "8f74e380-8b6b-463c-b949-a3051438746a",
       "name": "Victim Webhook OpenAI",
-      "webhookId": "dd2b0dbc-df37-4dc2-9d4c-8b3b133f4531"
+      "webhookId": "dd2b0dbc-df37-4dc2-9d4c-8b3b133f4531",
+      "disabled": true
     },
     {
       "parameters": {
         "resource": "speech",
         "voice": {
           "__rl": true,
-          "value": "21m00Tcm4TlvDq8ikWAM",
+          "value": "FGY2WhTYpPnrIDTdsKH5",
           "mode": "id"
         },
         "text": "={{ $json.output.replace(/\\*.*?\\*|\\(.*?\\)/g, '').trim() }}",
@@ -321,7 +318,7 @@
             "value": "eleven_multilingual_v2"
           },
           "languageCode": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang }}",
-          "voiceSettings": "{\n  \"stability\": 0.3,\n  \"similarity_boost\": 0.75,\n  \"style\": 0.5,\n  \"use_speaker_boost\": true,\n  \"speed\": 1\n}"
+          "voiceSettings": "{\n  \"stability\": 0.2,\n  \"similarity_boost\": 0.7,\n  \"style\": 0.8,\n  \"use_speaker_boost\": true,\n  \"speed\": 1.1\n}"
         },
         "requestOptions": {}
       },
@@ -331,12 +328,12 @@
         1140,
         0
       ],
-      "id": "fd1707e9-b684-469c-9782-33b0a4715831",
+      "id": "f04bf583-3805-4373-aaef-e4c6a86ca456",
       "name": "Convert text to speech",
       "credentials": {
         "elevenLabsApi": {
-          "id": "wd94EEC761lKsDPp",
-          "name": "ElevenLabs account 2"
+          "id": "FZEKo8YZLg9bFDrF",
+          "name": "ElevenLabs account"
         }
       }
     },
@@ -344,7 +341,6 @@
       "parameters": {
         "resource": "speech",
         "operation": "speechToText",
-        "file": "=data",
         "additionalOptions": {
           "languageCode": "={{ $('Victim Webhook ElevenLabs').item.json.body.lang }}"
         },
@@ -356,12 +352,12 @@
         280,
         0
       ],
-      "id": "621b3843-014b-4af9-8ba3-f3ffefe82318",
+      "id": "2b3c3ecf-82f7-41f6-b6ae-3d9d8aad5bfc",
       "name": "Transcribe audio or video",
       "credentials": {
         "elevenLabsApi": {
-          "id": "wd94EEC761lKsDPp",
-          "name": "ElevenLabs account 2"
+          "id": "FZEKo8YZLg9bFDrF",
+          "name": "ElevenLabs account"
         }
       }
     },
@@ -427,7 +423,7 @@
         500,
         0
       ],
-      "id": "96b505e6-4378-421e-bf6e-4bdc6b49b87f",
+      "id": "b905d540-1771-4ed6-9fec-56e108a7b50b",
       "name": "Language Mapping"
     },
     {
@@ -444,11 +440,11 @@
         160,
         960
       ],
-      "id": "ef9321be-a7d0-4c2e-b6aa-91483b11e828",
+      "id": "ba736731-ac2e-424a-b317-10d5b9c421eb",
       "name": "Transcribe a recording",
       "credentials": {
         "openAiApi": {
-          "id": "DACe7hdzCoHhJJeY",
+          "id": "c4FRyQYo26Zj5Vaa",
           "name": "OpenAi account"
         }
       }
@@ -467,11 +463,11 @@
         920,
         960
       ],
-      "id": "3099ecf2-2ce1-41dd-9d1e-8e92e0210a2b",
+      "id": "4b9bba94-30ac-4046-ac68-b89cb5d55ef8",
       "name": "Generate audio",
       "credentials": {
         "openAiApi": {
-          "id": "DACe7hdzCoHhJJeY",
+          "id": "c4FRyQYo26Zj5Vaa",
           "name": "OpenAi account"
         }
       }
@@ -488,7 +484,7 @@
         1140,
         960
       ],
-      "id": "6f76de58-7300-4f55-9015-0931a326c199",
+      "id": "68f8187e-242f-4e12-8154-ce9fc27b9e2c",
       "name": "Extract from File2"
     },
     {
@@ -503,7 +499,7 @@
         1380,
         960
       ],
-      "id": "6a0b3b95-fab8-4e61-b8e8-ab3de94fe699",
+      "id": "59ebf39b-3d8c-459e-8f6f-712b5ea026ac",
       "name": "Respond to Webhook OpenAI"
     },
     {
@@ -568,7 +564,7 @@
         340,
         960
       ],
-      "id": "06f85bc7-a111-4a1a-ad02-f79bd8332d93",
+      "id": "2260b075-f1b3-4ca4-814f-ca5347578f74",
       "name": "Language Mapping1"
     }
   ],
@@ -629,17 +625,6 @@
         ]
       ]
     },
-    "Victim Agent": {
-      "main": [
-        [
-          {
-            "node": "Convert text to speech",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Structured Output Parser": {
       "ai_outputParser": [
         [
@@ -656,17 +641,6 @@
         [
           {
             "node": "Evaluation Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Victim Webhook ElevenLabs": {
-      "main": [
-        [
-          {
-            "node": "Transcribe audio or video",
             "type": "main",
             "index": 0
           }
@@ -717,33 +691,6 @@
         ]
       ]
     },
-    "Convert text to speech": {
-      "main": [
-        [
-          {
-            "node": "Extract from File",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Respond to Webhook": {
-      "main": [
-        []
-      ]
-    },
-    "Transcribe audio or video": {
-      "main": [
-        [
-          {
-            "node": "Language Mapping",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Language Mapping": {
       "main": [
         [
@@ -753,11 +700,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        []
       ]
     },
     "Transcribe a recording": {
@@ -803,17 +745,61 @@
           }
         ]
       ]
+    },
+    "Victim Webhook ElevenLabs": {
+      "main": [
+        [
+          {
+            "node": "Transcribe audio or video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe audio or video": {
+      "main": [
+        [
+          {
+            "node": "Language Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Victim Agent": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "3cc16e0e-5c6c-45f9-9f94-e3201e28cc2f",
+  "versionId": "c166322d-8f6e-46a2-a209-ec045d9ba5f7",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "ce0aea2931b48a2f63f967ba66e819f871ab76c12b32ecb79f7efefef9715e38"
+    "instanceId": "4f6cf0959d70583dee4b555812bb059478825c1df7c91fc06d40063328608c7f"
   },
-  "id": "y0KHp0xYK1OB8kku",
+  "id": "RiFHz5fl5S3m2zl2",
   "tags": []
 }
