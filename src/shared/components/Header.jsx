@@ -9,7 +9,9 @@ const Header = (props) => {
   const { language, onSetLangage } = props;
   const [useCase, setUseCase] = useState("s4");
   const { mutateAsync: resetConversation } = useResetConversation();
-  const { clearConversationMessages } = useMessages();
+  const { clearConversationMessages, getMessages } = useMessages();
+
+  const isMessagesEmpty = !getMessages.data;
 
   const handleLanguageChange = (event) => {
     onSetLangage(event.target.value);
@@ -25,11 +27,11 @@ const Header = (props) => {
     clearConversationMessages();
   };
 
-  const onResetConversation = async () => {
+  const handleResetConversation = async () => {
     try {
+      removeMessages();
       const result = await resetConversation();
       if (result.success) {
-        removeMessages();
         clearConversationMessages();
       } else {
         console.error("Failed to reset conversation:", result);
@@ -62,8 +64,11 @@ const Header = (props) => {
         </Link>
         <Button
           variant="contained"
-          className="button-contained page-button"
-          onClick={onResetConversation}
+          className={`button-contained page-button page-button${
+            isMessagesEmpty && "-disabled"
+          }`}
+          onClick={handleResetConversation}
+          disabled={isMessagesEmpty}
         >
           Reset
         </Button>

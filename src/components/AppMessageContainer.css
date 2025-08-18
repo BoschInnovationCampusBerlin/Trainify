@@ -20,6 +20,11 @@
   align-items: center !important;
 }
 
+.record-send-message-button-disabled {
+  background-color: #C1C7CC !important;
+  cursor: not-allowed;
+}
+
 .record-send-message-button:hover {
   background-color: var(--color-primary-hover);
 }
