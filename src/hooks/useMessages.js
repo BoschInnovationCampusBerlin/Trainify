@@ -8,13 +8,17 @@ export const useMessages = () => {
 
   const getMessages = useQuery({
     queryKey: MESSAGES_QUERY_KEY,
-    queryFn: () => [],
-    staleTime: Infinity,
+    queryFn: () => {
+      return queryClient.getQueryData(MESSAGES_QUERY_KEY) ?? [];
+    },
+    invalidateQueries: {
+      queryKey: [CONVERSATION_KEY.CONVERSATIONS],
+    },
     enabled: false,
   });
 
   const setMessages = useMutation({
-    mutationFn: (newMessages) => newMessages, // just pass through
+    mutationFn: (newMessages) => newMessages,
     onSuccess: (data) => {
       queryClient.setQueryData(MESSAGES_QUERY_KEY, data);
     },
@@ -28,13 +32,14 @@ export const useMessages = () => {
 
   const clearConversationMessages = () => {
     queryClient.setQueryData(MESSAGES_QUERY_KEY, []);
-    queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY_KEY});
+    queryClient.invalidateQueries({ queryKey: MESSAGES_QUERY_KEY });
   };
 
   return {
     messages: queryClient.getQueryData(MESSAGES_QUERY_KEY) || [],
+    getMessages,
     setMessages: setMessages.mutate,
     addConversationMessage,
-    clearConversationMessages
+    clearConversationMessages,
   };
 };

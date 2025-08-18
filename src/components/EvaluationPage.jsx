@@ -59,7 +59,6 @@ const EvaluationPage = () => {
   };
 
   const getPercentageColor = (percentage) => {
-    console.log(percentage);
     if (percentage >= 80) return "green";
     if (percentage >= 50) return "orange";
     return "red";

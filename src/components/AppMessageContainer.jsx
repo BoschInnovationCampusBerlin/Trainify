@@ -16,7 +16,7 @@ const AppMessageContainer = (props) => {
     useMessages();
   const [transcript, setTranscript] = useState("");
   const [isListening, setIsListening] = useState(false);
-  const [nextPromptText, setNextPromptText] = useState("");
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   const recognitionRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -132,8 +132,13 @@ const AppMessageContainer = (props) => {
         const responseAudioBlob = new Blob([byteArray], { type: "audio/mpeg" });
         const url = URL.createObjectURL(responseAudioBlob);
         const audio = new Audio(url);
+
+        audio.onplay = () => setIsAudioPlaying(true);
+        audio.onended = () => setIsAudioPlaying(false);
+
         audio.play().catch((err) => {
           console.warn("Audio playback failed:", err.message);
+          setIsAudioPlaying(false);
         });
 
         const assistantMessage = formatAssistantMessage(data.audioText);
@@ -143,7 +148,6 @@ const AppMessageContainer = (props) => {
         ]);
         addConversationMessage({ role: "victim", content: assistantMessage });
 
-        setNextPromptText(data.promptText);
       }
     } catch (error) {
       console.error(
@@ -175,8 +179,9 @@ const AppMessageContainer = (props) => {
       <div className="audio-record-container">
         {/* <AgentPromptContainer userInput={nextPromptText} sendMessage={sendMessage}  /> */}
         <IconButton
-          className="record-send-message-button"
+          className={`record-send-message-button record-send-message-button${isAudioPlaying || isSendRecordingPending ? "-disabled" : ""}`}
           onClick={isListening ? stopListening : startListening}
+          disabled={isAudioPlaying || isSendRecordingPending}
         >
           {!isListening ? (
             <RecordIcon style={{ width: 30, height: 30 }} />
