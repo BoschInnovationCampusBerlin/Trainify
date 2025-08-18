@@ -1,0 +1,25 @@
+.audio-record-container {
+  width: 65rem !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.record-send-message-button {
+  display: block;
+  border-radius: 50% !important;
+  font-size: var(--font-size-base);
+  width: fit-content;
+  background-color: var(--color-primary) !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  line-height: 28px !important;
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.record-send-message-button:hover {
+  background-color: var(--color-primary-hover);
+}

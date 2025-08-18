@@ -1,4 +1,7 @@
+import { handleSetN8nLanguage } from "../utils/n8nLanguageConvert";
 import { api } from "./api";
+
+const n8nBaseUrl = "https://lamnhuthoa.app.n8n.cloud/webhook";
 
 export const openAiServices = {
   sendMessage: async (message) => {
@@ -17,12 +20,14 @@ export const openAiServices = {
       )
       .then((response) => response.data);
   },
-  sendRecording: async (audio) => {
+  sendRecording: async ({ audioBlob, lang }) => {
     const formData = new FormData();
-    formData.append("data", audio, "recoding.webm")
+    formData.append("data", audioBlob, "recoding.webm");
+    const selectedLanguage = handleSetN8nLanguage(lang);
+    formData.append("lang", selectedLanguage);
 
     return await api.post(
-      "https://pavelsimo.app.n8n.cloud/webhook-test/speech-to-text",
+      `${n8nBaseUrl}/speech-to-text`,
       formData,
       {
         headers: {
@@ -31,4 +36,18 @@ export const openAiServices = {
       }
     );
   },
+  getEvaluation: async (messages) => {
+    return await api.post(
+      `${n8nBaseUrl}/eval-transcript`,
+      messages,
+      {
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      }
+    );
+  },
+  resetConversation: async () => {
+    return await api.delete(`${n8nBaseUrl}/reset-conversation`)
+  }
 };

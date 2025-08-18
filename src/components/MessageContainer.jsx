@@ -21,7 +21,7 @@ const MessageContainer = (props) => {
             </div>
         ))}
         <div ref={endOfMessagesRef}></div>
-        {isLoading && messages.length > 0 && <div className="loader">Bot is answering</div>}
+        {isLoading && messages.length > 0 && <div className="loader">Agent is answering</div>}
       </div>
   );
 };

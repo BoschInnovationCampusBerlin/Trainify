@@ -5,12 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {QueryClientProvider} from "@tanstack/react-query";
 import {queryClient} from "./utils/reactQueryUtil";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
         <App />
+        <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
 );

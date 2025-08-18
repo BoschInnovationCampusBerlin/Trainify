@@ -1,9 +1,9 @@
-.role.user {
+.role.agent {
   background-color: var(--color-secondary);
   align-self: flex-end;
 }
 
-.role.assistant {
+.role.victim {
   color: black;
   align-self: flex-start;
   padding: 15px 8px !important;
@@ -30,6 +30,10 @@ li {
   margin-top: .5rem !important;
   padding: .5rem !important;
   left: -.5rem !important;
+}
+
+.user-content p {
+  margin: 0 !important;
 }
 
 @keyframes rotate {
