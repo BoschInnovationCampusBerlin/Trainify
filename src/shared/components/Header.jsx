@@ -84,10 +84,10 @@ const Header = (props) => {
             <MenuItem value="de-DE">German</MenuItem>
             <MenuItem value="it-IT">Italian</MenuItem>
             <MenuItem value="zh-CN">Chinese</MenuItem>
-            <MenuItem value="ko-KR">Korean</MenuItem>
+            {/* <MenuItem value="ko-KR">Korean</MenuItem> */}
             <MenuItem value="vi-VN">Vietnamese</MenuItem>
-            <MenuItem value="es-ES">Spanish</MenuItem>
-            <MenuItem value="th-TH">Thai</MenuItem>
+            {/* <MenuItem value="es-ES">Spanish</MenuItem> */}
+            {/* <MenuItem value="th-TH">Thai</MenuItem> */}
             {/* <MenuItem value="fr-FR">French</MenuItem> */}
           </Select>
         </FormControl>
